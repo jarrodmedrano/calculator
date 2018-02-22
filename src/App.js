@@ -14,10 +14,10 @@ class Button extends Component {
 
 class App extends Component {
   state = {
-      count: '0',
-      memCount: '0',
+      currentCount: '0',
+      pastCount: '0',
       flipped: false,
-      operator: '',
+      operator: ''
     };
 
   initialState = this.state;
@@ -30,17 +30,24 @@ class App extends Component {
   };
 
   onClickHandler = (value) => {
-    if(this.state.count === '0') {
-      this.setState({count: value})
+    if(this.state.currentCount === '0') {
+      //set the current count to the number you pressed
+      this.setState({currentCount: value})
     } else if(this.state.flipped === false) {
-      this.setState({count: this.state.count + value})
+      //if no operator was pressed keep adding numbers to the end of the string
+      this.setState({currentCount: this.state.currentCount + value})
     } else {
-      let newCount = this.operate[this.state.operator](parseInt(this.state.count), parseInt(value));
-      this.setState({memCount: value, count: newCount})
+      //calculate the new count using whatever operator was pressed
+      let newCount =
+        this.operate[this.state.operator](parseInt(this.state.currentCount),
+        parseInt(value));
+
+      this.setState({pastCount: value, currentCount: newCount})
     }
   };
 
   operatorHandler = (value) => {
+    //set the operator to whatever operator was pressed
     this.setState({operator: value, flipped: true});
   };
 
@@ -49,8 +56,10 @@ class App extends Component {
   };
 
   equalsHandler = () => {
-    let newCount = this.operate[this.state.operator](parseInt(this.state.count), parseInt(this.state.memCount));
-    this.setState({count: newCount})
+    if(this.state.operator && this.state.currentCount !== '0') {
+      let newCount = this.operate[this.state.operator](parseInt(this.state.currentCount), parseInt(this.state.pastCount));
+      this.setState({currentCount: newCount})
+    }
   };
 
   render() {
@@ -58,7 +67,7 @@ class App extends Component {
     const operators = ['*','-','+','/'];
     return (
       <div className="App">
-        <h1>{this.state.count}</h1>
+        <h1>{this.state.currentCount}</h1>
         {
           buttons.map((item, id) => {
             return <Button key={id} onClick={this.onClickHandler} value={item} />
