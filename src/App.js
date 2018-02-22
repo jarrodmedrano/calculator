@@ -14,8 +14,8 @@ class Button extends Component {
 
 class App extends Component {
   state = {
-      count: 0,
-      memCount: 0,
+      count: '0',
+      memCount: '0',
       flipped: false,
       operator: '',
     };
@@ -30,10 +30,12 @@ class App extends Component {
   };
 
   onClickHandler = (value) => {
-    if(this.state.flipped === false) {
+    if(this.state.count === '0') {
       this.setState({count: value})
+    } else if(this.state.flipped === false) {
+      this.setState({count: this.state.count + value})
     } else {
-      this.setState({memCount: this.operate[this.state.operator](this.state.count, value)})
+      this.setState({memCount: value, count: this.operate[this.state.operator](parseInt(this.state.count), parseInt(value))})
     }
   };
 
@@ -46,11 +48,11 @@ class App extends Component {
   };
 
   equalsHandler = () => {
-    this.setState({count: this.state.memCount})
+    this.setState({count: this.operate[this.state.operator](parseInt(this.state.count), parseInt(this.state.memCount))})
   };
 
   render() {
-    const buttons = [0,1,2,3,4,5,6,7,8,9];
+    const buttons = ['0','1','2','3','4','5','6','7','8','9'];
     const operators = ['*','-','+','/'];
     return (
       <div className="App">
@@ -67,7 +69,6 @@ class App extends Component {
         }
         <Button value="=" onClick={this.equalsHandler} />
         <Button value="AC" onClick={this.resetHandler} />
-
       </div>
     );
   }
