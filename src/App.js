@@ -35,12 +35,13 @@ class App extends Component {
     } else if(this.state.flipped === false) {
       this.setState({count: this.state.count + value})
     } else {
-      this.setState({memCount: value, count: this.operate[this.state.operator](parseInt(this.state.count), parseInt(value))})
+      let newCount = this.operate[this.state.operator](parseInt(this.state.count), parseInt(value));
+      this.setState({memCount: value, count: newCount})
     }
   };
 
   operatorHandler = (value) => {
-      this.setState({operator: value, flipped: true});
+    this.setState({operator: value, flipped: true});
   };
 
   resetHandler = () => {
@@ -48,7 +49,8 @@ class App extends Component {
   };
 
   equalsHandler = () => {
-    this.setState({count: this.operate[this.state.operator](parseInt(this.state.count), parseInt(this.state.memCount))})
+    let newCount = this.operate[this.state.operator](parseInt(this.state.count), parseInt(this.state.memCount));
+    this.setState({count: newCount})
   };
 
   render() {
